@@ -57,7 +57,7 @@ func main() {
 		log.Fatalf("Unable to retrieve Sheets client: %v", err)
 	}
 
-	spreadsheetId := "1XybGqVmvi5C5Oy7GsfIPorHcq2crCZR2TH0at5nlNog"
+	spreadsheetId := os.Getenv("GOOGLE_SHEET_ID")
 	readRange := "SRC"
 	resp, err := srv.Spreadsheets.Values.Get(spreadsheetId, readRange).Do()
 	if err != nil {
