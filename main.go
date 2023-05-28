@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -127,7 +126,7 @@ func main() {
 		}
 
 		fmt.Println("Writing to output.json")
-		ioutil.WriteFile("output.json", json, 0644)
+		os.WriteFile("output.json", json, 0644)
 	}
 
 }
