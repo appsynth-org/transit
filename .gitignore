@@ -2,3 +2,7 @@
 .vscode/
 
 tmp/
+
+credentials.json
+
+output.json
