@@ -102,6 +102,7 @@ func main() {
 					})
 
 					currentGroupIndex = findGroupIndex(scope.(string), groups)
+					continue
 				}
 
 				// if scope is empty, add to current group
