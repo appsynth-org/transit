@@ -22,6 +22,14 @@ func main() {
 		log.Fatalf("Unable to read spreadsheet %v", err)
 	}
 
-	// TODO: write translation to file
+	/**
+	*	Generate locale files and save to
+	*	- ./output/iOS
+	*	|- en.strings
+	*	|- th.strings
+	*	- ./output/Android
+	*	|- en.xml
+	*	|- th.xml
+	**/
 	utils.GenerateLocale(groups)
 }
