@@ -7,8 +7,7 @@ import (
 )
 
 type Document struct {
-	File         *os.File
-	FileLocation string
+	File *os.File
 }
 
 func NewIosDocument(lang string) *Document {
@@ -19,8 +18,7 @@ func NewIosDocument(lang string) *Document {
 	}
 
 	return &Document{
-		File:         file,
-		FileLocation: fmt.Sprintf("./output/iOS/%s.strings", lang),
+		File: file,
 	}
 }
 
