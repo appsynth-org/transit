@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"encoding/base64"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -122,15 +121,15 @@ func ReadSpreadSheet(ctx context.Context) ([]LocalizeGroup, error) {
 			}
 		}
 
-		fmt.Printf("Read data from sheet success, Found %v groups 📝", len(groups))
+		fmt.Printf("Read data from sheet success, Found %v groups 📝\n", len(groups))
 
-		json, err := json.MarshalIndent(groups, "", "  ")
-		if err != nil {
-			return nil, fmt.Errorf("unable to marshal json %v", err)
-		}
+		// json, err := json.MarshalIndent(groups, "", "  ")
+		// if err != nil {
+		// 	return nil, fmt.Errorf("unable to marshal json %v", err)
+		// }
 
-		fmt.Println("Writing to output.json...")
-		os.WriteFile("output.json", json, 0644)
+		// fmt.Println("Writing to output.json...")
+		// os.WriteFile("output.json", json, 0644)
 
 		return groups, nil
 	}
