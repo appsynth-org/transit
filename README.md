@@ -20,3 +20,8 @@ go run main.go
 - [How to create a new Service account](https://robocorp.com/docs/development-guide/google-sheets/interacting-with-google-sheets#create-a-new-google-sheet-and-add-the-service-account-as-an-editor-to-it)
 
 - [Google Sheet SDK docs](https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/get)
+
+### Release
+1. git checkout main
+2. git tag v*, i.e. v.0.1, v.1.0, v.10.0
+3. git tag origin [tag]
