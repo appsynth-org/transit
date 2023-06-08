@@ -9,6 +9,7 @@ import (
 	"github.com/appsynth-org/transit/config"
 	"github.com/appsynth-org/transit/reader"
 	"github.com/appsynth-org/transit/utils"
+	"github.com/appsynth-org/transit/writer"
 	"github.com/labstack/echo/v4"
 )
 
@@ -26,7 +27,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("Unable to read spreadsheet %v", err)
 		}
-		utils.GenerateLocaleFiles(groups)
+		writer.GenerateLocaleFiles(groups)
 
 		return c.String(http.StatusOK, "Hello, World!")
 	})
