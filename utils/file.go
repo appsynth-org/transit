@@ -28,7 +28,7 @@ func GetPlatformFolderName(platform string) string {
 	}
 }
 
-func HasTranslation() bool {
+func HasLocaleFiles() bool {
 	if _, err := os.Stat("../../output/Android"); os.IsNotExist(err) {
 		// path does not exist
 		return false

@@ -5,16 +5,20 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/appsynth-org/transit/config"
 	"github.com/appsynth-org/transit/reader"
 	"github.com/appsynth-org/transit/utils"
 	"github.com/appsynth-org/transit/writer"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	e := echo.New()
+	e.Pre(middleware.RemoveTrailingSlash())
+	e.Use(middleware.Recover())
 
 	config, err := config.LoadConfig()
 	if err != nil {
@@ -29,15 +33,17 @@ func main() {
 		}
 		writer.GenerateLocaleFiles(groups)
 
-		return c.String(http.StatusOK, "Hello, World!")
+		return c.NoContent(http.StatusNoContent)
 	})
 
-	e.GET("/", func(c echo.Context) error {
-		platform := c.QueryParam("platform")
-		lang := c.QueryParam("lang")
+	e.GET("/download", func(c echo.Context) error {
+		platform := strings.ToLower(c.QueryParam("platform"))
+		lang := strings.ToLower(c.QueryParam("lang"))
 
-		if !utils.HasTranslation() {
-			return c.String(http.StatusOK, "No translation found, please generate first")
+		if !utils.HasLocaleFiles() {
+			return c.JSON(http.StatusBadRequest, map[string]string{
+				"message": "No locale files found, Please generate locale files first",
+			})
 		}
 
 		fileName := fmt.Sprintf("%s_%s.%s", platform, lang, utils.GetFileExtension(platform))
