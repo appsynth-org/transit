@@ -1,76 +1,48 @@
 package utils
 
 import (
-	"fmt"
-	"log"
-
-	ss "github.com/appsynth-org/transit/service"
-	"github.com/beevik/etree"
+	"github.com/appsynth-org/transit/reader"
+	android "github.com/appsynth-org/transit/writer/android"
+	ios "github.com/appsynth-org/transit/writer/ios"
 )
 
-func GenerateLocale(groups []ss.LocalizeGroup) {
-	// iOS
-	docIosEN := NewIosDocument("en")
-	docIosTH := NewIosDocument("th")
-	docIosEN.WriteComment("lang en")
-	docIosTH.WriteComment("lang th")
+func GenerateLocale(groups []reader.LocalizeGroup) {
+	iosWriterEN := ios.NewDocument("en")
+	iosWriterTH := ios.NewDocument("th")
 
-	defer docIosEN.File.Close()
-	defer docIosTH.File.Close()
-
-	// Android
-	docAndroidEN, elementAndroidEN := newAndroidDocument("en")
-	docAndroidTH, elementAndroidTH := newAndroidDocument("th")
+	androidWriterEN := android.NewDocument("en")
+	androidWriterTH := android.NewDocument("th")
 
 	for _, group := range groups {
 		// EN
-		elementAndroidEN.CreateComment(group.GroupName)
-		docIosEN.WriteComment(group.GroupName)
+		iosWriterEN.WriteComment(group.GroupName)
+		androidWriterEN.WriteComment(group.GroupName)
 		// TH
-		elementAndroidTH.CreateComment(group.GroupName)
-		docIosTH.WriteComment(group.GroupName)
+		iosWriterTH.WriteComment(group.GroupName)
+		androidWriterTH.WriteComment(group.GroupName)
 
 		for _, translation := range group.Keys {
 			// Skip Android empty key
 			if len(translation.AndroidKey) > 0 {
 				// EN
-				eachEN := elementAndroidEN.CreateElement("string")
-				eachEN.CreateAttr("name", translation.AndroidKey)
-				eachEN.CreateText(translation.Translation.En)
+				androidWriterEN.WriteAttribute(translation.AndroidKey, translation.Translation.En)
 				// TH
-				eachTH := elementAndroidTH.CreateElement("string")
-				eachTH.CreateAttr("name", translation.AndroidKey)
-				eachTH.CreateText(translation.Translation.Th)
+				androidWriterTH.WriteAttribute(translation.AndroidKey, translation.Translation.Th)
 			}
 
 			// Skip iOS empty key
 			if (len(translation.IosKey)) > 0 {
 				// EN
-				docIosEN.WriteToFile(translation.IosKey, translation.Translation.En)
+				iosWriterEN.WriteAttribute(translation.IosKey, translation.Translation.En)
 				// TH
-				docIosTH.WriteToFile(translation.IosKey, translation.Translation.Th)
+				iosWriterTH.WriteAttribute(translation.IosKey, translation.Translation.Th)
 			}
 
 		}
 	}
 
-	docAndroidEN.Indent(2)
-	docAndroidTH.Indent(2)
-
-	err := docAndroidEN.WriteToFile("./output/Android/en.xml")
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = docAndroidTH.WriteToFile("./output/Android/th.xml")
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func newAndroidDocument(lang string) (*etree.Document, *etree.Element) {
-	doc := etree.NewDocument()
-	doc.CreateProcInst("xml", `version="1.0" encoding="UTF-8"`)
-	element := doc.CreateElement("resources")
-	element.CreateComment(fmt.Sprintf("lang %s", lang))
-	return doc, element
+	iosWriterEN.Close()
+	iosWriterTH.Close()
+	androidWriterEN.Close()
+	androidWriterTH.Close()
 }

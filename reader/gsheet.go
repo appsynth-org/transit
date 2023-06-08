@@ -1,4 +1,4 @@
-package service
+package reader
 
 import (
 	"context"
@@ -42,7 +42,7 @@ func findGroupIndex(groupName string, groups []LocalizeGroup) int {
 	return -1
 }
 
-func ReadSpreadSheet(ctx context.Context) ([]LocalizeGroup, error) {
+func ReadGoogleSheet(ctx context.Context) ([]LocalizeGroup, error) {
 	cred, err := base64.StdEncoding.DecodeString(os.Getenv("SERVICE_ACCOUNT_BASE64"))
 	if err != nil {
 		return nil, fmt.Errorf("unable to load env config %v", err)
@@ -122,14 +122,6 @@ func ReadSpreadSheet(ctx context.Context) ([]LocalizeGroup, error) {
 		}
 
 		fmt.Printf("Read data from sheet success, Found %v groups 📝\n", len(groups))
-
-		// json, err := json.MarshalIndent(groups, "", "  ")
-		// if err != nil {
-		// 	return nil, fmt.Errorf("unable to marshal json %v", err)
-		// }
-
-		// fmt.Println("Writing to output.json...")
-		// os.WriteFile("output.json", json, 0644)
 
 		return groups, nil
 	}

@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/appsynth-org/transit/service"
+	"github.com/appsynth-org/transit/reader"
 	"github.com/appsynth-org/transit/utils"
 	"github.com/joho/godotenv"
 )
@@ -52,7 +52,7 @@ func main() {
 		log.Fatalf("Unable to load env config %v", err)
 	}
 
-	groups, err := service.ReadSpreadSheet(ctx)
+	groups, err := reader.ReadGoogleSheet(ctx)
 	if err != nil {
 		log.Fatalf("Unable to read spreadsheet %v", err)
 	}
@@ -66,5 +66,6 @@ func main() {
 	*	|- en.xml
 	*	|- th.xml
 	**/
+
 	utils.GenerateLocale(groups)
 }
