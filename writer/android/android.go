@@ -2,6 +2,8 @@ package android_writer
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/beevik/etree"
 )
@@ -23,9 +25,22 @@ func (d *Document) WriteAttribute(key string, value string) {
 }
 
 func (d *Document) Close() {
-	filePath := fmt.Sprintf("./output/Android/%s.xml", d.Lang)
+	filePath := fmt.Sprintf("../../output/Android/%s.xml", d.Lang)
+	createDirectoryIfNotExist(filePath)
+
 	d.Doc.Indent(2)
 	d.Doc.WriteToFile(filePath)
+}
+
+func createDirectoryIfNotExist(path string) error {
+	dir := filepath.Dir(path)
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		err := os.MkdirAll(dir, 0755)
+		if err != nil {
+			return fmt.Errorf("error creating directory: %w", err)
+		}
+	}
+	return nil
 }
 
 func NewDocument(lang string) *Document {

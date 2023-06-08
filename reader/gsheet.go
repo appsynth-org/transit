@@ -5,8 +5,8 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"os"
 
+	"github.com/appsynth-org/transit/config"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 	"google.golang.org/api/sheets/v4"
@@ -42,26 +42,25 @@ func findGroupIndex(groupName string, groups []LocalizeGroup) int {
 	return -1
 }
 
-func ReadGoogleSheet(ctx context.Context) ([]LocalizeGroup, error) {
-	cred, err := base64.StdEncoding.DecodeString(os.Getenv("SERVICE_ACCOUNT_BASE64"))
+func ReadGoogleSheet(config *config.EnvConfig, ctx context.Context) ([]LocalizeGroup, error) {
+	cred, err := base64.StdEncoding.DecodeString(config.SERVICE_ACCOUNT_BASE64)
 	if err != nil {
 		return nil, fmt.Errorf("unable to load env config %v", err)
 	}
 
-	config, err := google.JWTConfigFromJSON(cred, "https://www.googleapis.com/auth/spreadsheets.readonly")
+	jwtConfig, err := google.JWTConfigFromJSON(cred, "https://www.googleapis.com/auth/spreadsheets.readonly")
 	if err != nil {
 		return nil, fmt.Errorf("unable to parse client secret file to config: %v", err)
 	}
-	client := config.Client(ctx)
+	client := jwtConfig.Client(ctx)
 
 	srv, err := sheets.NewService(ctx, option.WithHTTPClient(client))
 	if err != nil {
 		return nil, fmt.Errorf("unable to retrieve Sheets client: %v", err)
 	}
 
-	spreadsheetId := os.Getenv("GOOGLE_SHEET_ID")
 	readRange := "SRC"
-	resp, err := srv.Spreadsheets.Values.Get(spreadsheetId, readRange).Do()
+	resp, err := srv.Spreadsheets.Values.Get(config.GOOGLE_SHEET_ID, readRange).Do()
 	if err != nil {
 		return nil, fmt.Errorf("unable to retrieve data from sheet: %v", err)
 	}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 type Document struct {
@@ -29,8 +30,21 @@ func (d *Document) Close() {
 	d.File.Close()
 }
 
+func createDirectoryIfNotExist(path string) error {
+	dir := filepath.Dir(path)
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		err := os.MkdirAll(dir, 0755)
+		if err != nil {
+			return fmt.Errorf("error creating directory: %w", err)
+		}
+	}
+	return nil
+}
+
 func NewDocument(lang string) *Document {
-	filePath := fmt.Sprintf("./output/iOS/%s.strings", lang)
+	filePath := fmt.Sprintf("../../output/iOS/%s.strings", lang)
+	createDirectoryIfNotExist(filePath)
+
 	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		log.Fatal("Error opening file:", err)
