@@ -10,8 +10,8 @@ import (
 
 type EnvConfig struct {
 	PORT                   int    `env:"PORT"`
-	SERVICE_ACCOUNT_BASE64 string `env:"SERVICE_ACCOUNT_BASE64,required"`
-	GOOGLE_SHEET_ID        string `env:"GOOGLE_SHEET_ID,required"`
+	SERVICE_ACCOUNT_BASE64 string `env:"SERVICE_ACCOUNT_BASE64,required,notEmpty"`
+	GOOGLE_SHEET_ID        string `env:"GOOGLE_SHEET_ID,required,notEmpty"`
 }
 
 func LoadConfig() (*EnvConfig, error) {
