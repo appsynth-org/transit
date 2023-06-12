@@ -1,4 +1,4 @@
-package cmd
+package config_cmd
 
 import (
 	"fmt"
@@ -18,5 +18,5 @@ var generateConfigCmd = &cobra.Command{
 }
 
 func init() {
-	configCmd.AddCommand(generateConfigCmd)
+	ConfigCmd.AddCommand(generateConfigCmd)
 }

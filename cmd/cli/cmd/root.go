@@ -6,6 +6,7 @@ package cmd
 import (
 	"os"
 
+	config_cmd "github.com/appsynth-org/transit/cmd/cli/cmd/config"
 	"github.com/spf13/cobra"
 )
 
@@ -35,5 +36,5 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.AddCommand(configCmd)
+	rootCmd.AddCommand(config_cmd.ConfigCmd)
 }
