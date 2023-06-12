@@ -5,6 +5,3 @@ build:
 	go build -o bin/http ./cmd/http
 	go build -o bin/cli ./cmd/cli
 
-generate-env:
-	echo "🔨 Generating .env file..."
-	cp .env.example .env
