@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/caarlos0/env/v8"
 	"github.com/joho/godotenv"
@@ -14,7 +15,7 @@ type EnvConfig struct {
 }
 
 func LoadConfig() (*EnvConfig, error) {
-	err := godotenv.Load("../../.env")
+	err := godotenv.Load()
 	if err != nil {
 		return nil, err
 	}
@@ -26,4 +27,18 @@ func LoadConfig() (*EnvConfig, error) {
 	}
 
 	return &config, nil
+}
+
+func GenerateConfig() error {
+	f, err := os.Create(".env")
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	defer f.Close()
+
+	f.WriteString("SERVICE_ACCOUNT_BASE64=\n")
+	f.WriteString("GOOGLE_SHEET_ID=\n")
+
+	return nil
 }
