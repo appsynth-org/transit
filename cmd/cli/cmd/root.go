@@ -17,7 +17,7 @@ var rootCmd = &cobra.Command{
 	Long: `Transit is a command line tool for generating locale files from Google Sheet.
 	
 Prerequisite:
-- Run 'transit config -g' to generate .env file
+- Run 'transit config generate' to generate .env file
 - Replace generated .env file with your own values
 - Run 'transit generate' to generate locale files and saved in output folder
 	`,
