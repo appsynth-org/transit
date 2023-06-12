@@ -18,9 +18,14 @@ var (
 // configCmd represents the config command
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "A brief description of your command",
+	Short: "Command for listing and generating config file",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
+		if !generate && !list {
+			fmt.Println("Please provide -h for more information")
+			return
+		}
+
 		if generate {
 			fmt.Println("🥷🏻 Generating config file...")
 
