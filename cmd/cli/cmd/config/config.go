@@ -16,6 +16,3 @@ var ConfigCmd = &cobra.Command{
 		cmd.Help()
 	},
 }
-
-func init() {
-}
