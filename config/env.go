@@ -25,7 +25,9 @@ func LoadConfig() (*EnvConfig, error) {
 		GOOGLE_SHEET_ID:        os.Getenv("GOOGLE_SHEET_ID"),
 	}
 
-	fmt.Printf("%+v", config)
+	if os.Getenv("DEBUG") == "true" {
+		fmt.Printf("%+v", config)
+	}
 
 	return config, nil
 }
