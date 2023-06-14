@@ -3,30 +3,31 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
 
-	"github.com/caarlos0/env/v8"
 	"github.com/joho/godotenv"
 )
 
 type EnvConfig struct {
-	PORT                   int    `env:"PORT"`
-	SERVICE_ACCOUNT_BASE64 string `env:"SERVICE_ACCOUNT_BASE64,required,notEmpty"`
-	GOOGLE_SHEET_ID        string `env:"GOOGLE_SHEET_ID,required,notEmpty"`
+	PORT                   int
+	SERVICE_ACCOUNT_BASE64 string
+	GOOGLE_SHEET_ID        string
 }
 
 func LoadConfig() (*EnvConfig, error) {
-	err := godotenv.Load()
-	if err != nil {
-		return nil, err
-	}
-	config := EnvConfig{}
+	godotenv.Load()
 
-	if err := env.Parse(&config); err != nil {
-		fmt.Printf("%+v\n", err)
-		return nil, err
+	port, _ := strconv.Atoi(os.Getenv("PORT"))
+
+	config := &EnvConfig{
+		PORT:                   port,
+		SERVICE_ACCOUNT_BASE64: os.Getenv("SERVICE_ACCOUNT_BASE64"),
+		GOOGLE_SHEET_ID:        os.Getenv("GOOGLE_SHEET_ID"),
 	}
 
-	return &config, nil
+	fmt.Printf("%+v", config)
+
+	return config, nil
 }
 
 func GenerateConfig() error {
