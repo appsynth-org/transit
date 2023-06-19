@@ -2,6 +2,7 @@ package android_writer
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/appsynth-org/transit/utils"
 	"github.com/beevik/etree"
@@ -20,7 +21,7 @@ func (d *Document) WriteComment(comment string) {
 func (d *Document) WriteAttribute(key string, value string) {
 	element := d.Element.CreateElement("string")
 	element.CreateAttr("name", key)
-	element.CreateText(value)
+	element.CreateText(d.Escape(value))
 }
 
 func (d *Document) Close() {
@@ -29,6 +30,14 @@ func (d *Document) Close() {
 
 	d.Doc.Indent(2)
 	d.Doc.WriteToFile(filePath)
+}
+
+func (d *Document) Escape(input string) string {
+	// From Google Sheet App scripts
+	input = strings.ReplaceAll(input, "'", "\\'")
+	input = strings.ReplaceAll(input, "&lt;", "<")
+	input = strings.ReplaceAll(input, "&gt;", ">")
+	return input
 }
 
 func NewDocument(lang string) *Document {
