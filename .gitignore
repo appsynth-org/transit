@@ -7,3 +7,5 @@ credentials.json
 
 output.json
 output/
+
+bin/
